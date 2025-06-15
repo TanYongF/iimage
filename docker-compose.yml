@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    image: ${DOCKER_USERNAME}/photoommit:latest
+    container_name: photoommit
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs 
