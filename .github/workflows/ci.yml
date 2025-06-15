@@ -18,11 +18,22 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
+        cache: 'npm'
+
+    - name: Cache npm dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          frontend/node_modules
+          backend/node_modules
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-modules-
 
     - name: Install Dependencies
       run: |
-        cd frontend && npm install
-        cd ../backend && npm install
+        cd frontend && npm ci
+        cd ../backend && npm ci
 
     - name: Build
       run: |
@@ -41,6 +52,8 @@ jobs:
         context: .
         push: true
         tags: ${{ secrets.DOCKER_HUB_USERNAME }}/photoommit:latest
+        cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/photoommit:buildcache
+        cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/photoommit:buildcache,mode=max
         secrets: |
           "OSS_ACCESS_KEY_ID=${{ secrets.OSS_ACCESS_KEY_ID }}"
           "OSS_ACCESS_KEY_SECRET=${{ secrets.OSS_ACCESS_KEY_SECRET }}"
@@ -58,11 +71,11 @@ jobs:
         script: |
           cd /opt/photoommit
           # 创建 docker-compose.yml
-          cat > docker-compose.yml << 'EOL'
+          cat > docker-compose.yml << EOL
           version: '3'
           services:
             app:
-              image: ${DOCKER_HUB_USERNAME}/photoommit:latest
+              image: ${{ secrets.DOCKER_HUB_USERNAME }}/photoommit:latest
               ports:
                 - "3003:3000"
               environment:
