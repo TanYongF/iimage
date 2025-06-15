@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: DOCKER_HUB_USERNAME
+    environment: production
 
     steps:
     - uses: actions/checkout@v3
@@ -55,7 +55,12 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_SSH_KEY }}
+        debug: true
         script: |
+          echo "Testing SSH connection..."
+          whoami
+          pwd
+          ls -la
           cd /opt/photoommit
           echo "OSS_ACCESS_KEY_ID=${{ secrets.OSS_ACCESS_KEY_ID }}" > .env
           echo "OSS_ACCESS_KEY_SECRET=${{ secrets.OSS_ACCESS_KEY_SECRET }}" >> .env
