@@ -55,18 +55,29 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_SSH_KEY }}
-        debug: true
         script: |
-          echo "Testing SSH connection..."
-          whoami
-          pwd
-          ls -la
           cd /opt/photoommit
+          # 创建 docker-compose.yml
+          cat > docker-compose.yml << 'EOL'
+          version: '3'
+          services:
+            app:
+              image: ${DOCKER_HUB_USERNAME}/photoommit:latest
+              ports:
+                - "3003:3000"
+              environment:
+                - NODE_ENV=production
+              volumes:
+                - ./.env:/app/backend/.env
+              restart: always
+          EOL
+          # 创建 .env 文件
           echo "OSS_ACCESS_KEY_ID=${{ secrets.OSS_ACCESS_KEY_ID }}" > .env
           echo "OSS_ACCESS_KEY_SECRET=${{ secrets.OSS_ACCESS_KEY_SECRET }}" >> .env
           echo "OSS_BUCKET=${{ secrets.OSS_BUCKET }}" >> .env
           echo "OSS_REGION=${{ secrets.OSS_REGION }}" >> .env
           echo "OSS_ENDPOINT=${{ secrets.OSS_ENDPOINT }}" >> .env
+          # 拉取镜像并启动服务
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/photoommit:latest
           docker-compose down
           docker-compose up -d 
