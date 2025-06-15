@@ -23,7 +23,8 @@ COPY --from=frontend-builder /app/dist /app/frontend/dist
 # 复制后端文件
 COPY --from=backend-builder /app/package*.json /app/backend/
 COPY --from=backend-builder /app/node_modules /app/backend/node_modules
-COPY --from=backend-builder /app/src /app/backend/src
+COPY --from=backend-builder /app/server.js /app/backend/
+COPY --from=backend-builder /app/config /app/backend/config
 
 # 设置工作目录为后端目录
 WORKDIR /app/backend
