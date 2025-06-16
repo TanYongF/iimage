@@ -62,6 +62,12 @@ const copyUrl = () => {
   navigator.clipboard.writeText(uploadedUrl.value)
   ElMessage.success('链接已复制到剪贴板')
 }
+
+const copyMarkdown = () => {
+  const markdown = `![image](${uploadedUrl.value})`
+  navigator.clipboard.writeText(markdown)
+  ElMessage.success('Markdown 链接已复制到剪贴板')
+}
 </script>
 
 <template>
@@ -94,6 +100,7 @@ const copyUrl = () => {
         <el-input v-model="uploadedUrl" readonly>
           <template #append>
             <el-button @click="copyUrl">复制链接</el-button>
+            <el-button @click="copyMarkdown">复制 Markdown</el-button>
           </template>
         </el-input>
       </div>

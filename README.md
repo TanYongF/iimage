@@ -1,102 +1,112 @@
 # PhotoOmmit
 
-**PhotoOmmit** 是一个轻量级在线图床网站，支持粘贴上传图片，自动生成图片直链，适合博客、Markdown 文档、论坛等场景使用。
+一个轻量级的在线图床服务，支持图片上传、链接复制和 Markdown 格式复制。
 
-👉 [立即使用 PhotoOmmit](https://photo.tans.fun)
+## 功能特点
 
-## ✨ 功能特性
+- 支持拖拽、点击或粘贴上传图片
+- 支持复制图片链接和 Markdown 格式
+- 支持大文件上传（最大 30MB）
+- 内置限速保护：
+  - 每秒最多上传 5 张图片
+  - 每个 IP 每天最多上传 100 张图片
+- 支持 Docker 部署
+- 支持 GitHub Actions 自动部署
 
-- 📋 粘贴上传：直接 `Ctrl+V` 粘贴图片上传，无需拖拽或选择文件
-- 🔗 自动生成外链：上传成功后立即获取图片 URL
-- ☁️ 后端存储支持：使用阿里云 OSS 实现高可靠的图片存储
-- 🖼️ 支持多种图片格式：如 PNG、JPG、GIF、WebP 等
-- 📁 支持批量上传、历史记录（可选）
+## 技术栈
 
-## 🛠 技术栈
+- 前端：Vue 3 + Element Plus
+- 后端：Node.js + Express
+- 存储：阿里云 OSS
+- 部署：Docker + GitHub Actions
 
-前端：
+## 本地开发
 
-- [Vue 3](https://vuejs.org/) + [Vite](https://vitejs.dev/)
-- [Element Plus](https://element-plus.org/) 或其他组件库（如适用）
-- [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API)
-
-后端：
-
-- Node.js + Express（或 NestJS 等）
-- 阿里云 OSS SDK（`ali-oss`）
-- 可选：MongoDB / Redis 用于记录用户上传历史
-
-## 🚀 快速开始
-
-### 在线体验
-
-1. 访问 [https://photo.tans.fun](https://photo.tans.fun)
-2. 将图片复制到剪贴板（例如截图工具复制 PNG）
-3. 在网站中按 `Ctrl+V` 粘贴
-4. 上传成功后即可复制图片直链！
-
-### 本地部署（开发中）
-
+1. 克隆仓库：
 ```bash
-# 克隆仓库
-git clone https://github.com/yourname/photoommit.git
+git clone https://github.com/你的用户名/photoommit.git
 cd photoommit
+```
 
-# 安装依赖
+2. 安装依赖：
+```bash
+# 安装前端依赖
+cd frontend
 npm install
 
-# 启动开发服务器
+# 安装后端依赖
+cd ../backend
+npm install
+```
+
+3. 配置环境变量：
+```bash
+# 在 backend 目录下创建 .env 文件
+cp env.example.txt .env
+# 编辑 .env 文件，填入你的阿里云 OSS 配置
+```
+
+4. 启动开发服务器：
+```bash
+# 启动前端开发服务器
+cd frontend
 npm run dev
 
+# 启动后端服务器
+cd ../backend
+npm run dev
 ```
 
-## 📦 自动化部署
+## Docker 部署
 
-### GitHub Actions
-
-项目使用 GitHub Actions 进行自动化构建和部署：
-
-1. 代码推送触发构建
-2. 运行测试
-3. 构建 Docker 镜像
-4. 推送到 Docker Hub
-5. 自动部署到服务器
-
-### 部署流程
-
-1. 推送代码到 main 分支
-2. GitHub Actions 自动触发构建
-3. 构建成功后自动部署到服务器
-
-## 🔧 开发指南
-
-### 目录结构
-
-```
-photoommit/
-├── frontend/          # 前端项目
-│   ├── src/          # 源代码
-│   └── public/       # 静态资源
-├── backend/          # 后端项目
-│   ├── config/       # 配置文件
-│   └── routes/       # 路由文件
-└── docker/           # Docker 相关文件
+1. 构建镜像：
+```bash
+docker-compose build
 ```
 
-### 开发规范
+2. 启动服务：
+```bash
+docker-compose up -d
+```
 
-- 使用 ESLint 进行代码规范检查
-- 遵循 Git Flow 工作流
-- 提交信息遵循 Conventional Commits 规范
+服务将在 http://localhost:8085 上运行。
 
-## 📝 许可证
+## 环境变量配置
 
-MIT License
+在 `backend/.env` 文件中配置以下环境变量：
 
-## 🤝 贡献指南
+```env
+# 服务器配置
+PORT=3000
+
+# 阿里云 OSS 配置
+OSS_REGION=your-region
+OSS_ACCESS_KEY_ID=your-access-key-id
+OSS_ACCESS_KEY_SECRET=your-access-key-secret
+OSS_BUCKET=your-bucket-name
+OSS_ENDPOINT=your-endpoint
+```
+
+## 限速配置
+
+在 `backend/server.js` 中可以修改限速配置：
+
+```javascript
+const RATE_LIMIT = {
+  windowMs: 1000,    // 时间窗口（毫秒）
+  max: 5,            // 每秒最大请求数
+  dailyLimit: 100    // 每日最大请求数
+};
+```
+
+## 贡献指南
 
 1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+2. 创建你的特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交你的更改 (`git commit -m 'Add some AmazingFeature'`)
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 创建 Pull Request
+5. 开启一个 Pull Request
+
+## 许可证
+
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情

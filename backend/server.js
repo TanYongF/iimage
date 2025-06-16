@@ -10,6 +10,58 @@ dotenv.config();
 
 const app = express();
 
+// 限速配置
+const RATE_LIMIT = {
+  windowMs: 1000, // 1秒
+  max: 5, // 每秒最多5个请求
+  dailyLimit: 100 // 每天最多100个请求
+};
+
+// 存储每个IP的请求计数
+const ipRequests = new Map();
+
+// 限速中间件
+const rateLimiter = (req, res, next) => {
+  const ip = req.ip;
+  const now = Date.now();
+  
+  // 初始化IP记录
+  if (!ipRequests[ip]) {
+    ipRequests[ip] = {
+      requests: [],
+      dailyCount: 0,
+      lastReset: now
+    };
+  }
+  
+  // 重置每日计数
+  if (now - ipRequests[ip].lastReset > 24 * 60 * 60 * 1000) {
+    ipRequests[ip].dailyCount = 0;
+    ipRequests[ip].lastReset = now;
+  }
+  
+  // 检查每日限制
+  if (ipRequests[ip].dailyCount >= RATE_LIMIT.dailyLimit) {
+    return res.status(429).json({ error: '已达到每日上传限制' });
+  }
+  
+  // 清理过期的请求记录
+  ipRequests[ip].requests = ipRequests[ip].requests.filter(
+    time => now - time < RATE_LIMIT.windowMs
+  );
+  
+  // 检查每秒限制
+  if (ipRequests[ip].requests.length >= RATE_LIMIT.max) {
+    return res.status(429).json({ error: '请求过于频繁，请稍后再试' });
+  }
+  
+  // 记录新请求
+  ipRequests[ip].requests.push(now);
+  ipRequests[ip].dailyCount++;
+  
+  next();
+};
+
 // 中间件
 app.use(cors());
 app.use(express.json());
@@ -21,7 +73,7 @@ app.use(express.static(path.join(__dirname, '../frontend/dist')));
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 5 * 1024 * 1024, // 限制 5MB
+    fileSize: 30 * 1024 * 1024, // 限制 30MB
   },
   fileFilter: (req, file, cb) => {
     // 只允许图片文件
@@ -44,7 +96,7 @@ app.get('/api/status', (req, res) => {
 });
 
 // 文件上传路由
-app.post('/api/upload', upload.single('image'), async (req, res) => {
+app.post('/api/upload', rateLimiter, upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: '请选择要上传的图片' });
@@ -62,7 +114,7 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     if (err.code === 'LIMIT_FILE_SIZE') {
-      return res.status(400).json({ error: '文件大小不能超过 5MB' });
+      return res.status(400).json({ error: '文件大小不能超过 30MB' });
     }
     return res.status(400).json({ error: err.message });
   }
