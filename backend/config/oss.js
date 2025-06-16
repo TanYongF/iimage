@@ -23,16 +23,23 @@ const ossClient = new OSS(ossConfig);
 const generateUniqueFileName = (originalName) => {
   const timestamp = Date.now();
   const randomString = Math.random().toString(36).substring(2, 8);
-  const extension = originalName.split('.').pop();
-  return `${ossConfig.dir}${timestamp}-${randomString}.${extension}`;
+  const extension = originalName.split('.').pop().toLowerCase();
+  const fileName = `${timestamp}-${randomString}.${extension}`;
+  return {
+    ossPath: `${ossConfig.dir}${fileName}`,
+    displayName: fileName
+  };
 };
 
 // 上传文件到 OSS
 const uploadToOSS = async (file) => {
   try {
-    const fileName = generateUniqueFileName(file.originalname);
-    const result = await ossClient.put(fileName, file.buffer);
-    return result.url;
+    const { ossPath, displayName } = generateUniqueFileName(file.originalname);
+    const result = await ossClient.put(ossPath, file.buffer);
+    return {
+      url: result.url,
+      fileName: displayName
+    };
   } catch (error) {
     console.error('OSS upload error:', error);
     throw new Error('文件上传失败');

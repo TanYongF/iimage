@@ -102,8 +102,11 @@ app.post('/api/upload', rateLimiter, upload.single('image'), async (req, res) =>
       return res.status(400).json({ error: '请选择要上传的图片' });
     }
 
-    const imageUrl = await uploadToOSS(req.file);
-    res.json({ url: imageUrl });
+    const result = await uploadToOSS(req.file);
+    res.json({ 
+      url: result.url,
+      fileName: result.fileName
+    });
   } catch (error) {
     console.error('Upload error:', error);
     res.status(500).json({ error: error.message || '上传失败' });

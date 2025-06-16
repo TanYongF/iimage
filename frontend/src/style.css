@@ -27,3 +27,59 @@ html, body {
     background-color: #ffffff;
   }
 }
+
+.result-area .el-button {
+  border: none;
+  color: #fff !important;
+  height: 40px;
+  padding: 0 20px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.copy-url-btn {
+  background: linear-gradient(135deg, #409EFF, #66b1ff);
+  color: #fff !important;
+}
+
+.copy-url-btn:hover {
+  background: linear-gradient(135deg, #66b1ff, #409EFF);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.2);
+}
+
+.copy-markdown-btn {
+  background: linear-gradient(135deg, #67C23A, #85ce61);
+  color: #fff !important;
+}
+
+.copy-markdown-btn:hover {
+  background: linear-gradient(135deg, #85ce61, #67C23A);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(103, 194, 58, 0.2);
+}
+
+.copy-html-btn {
+  background: linear-gradient(135deg, #E6A23C, #f0c78a);
+  color: #fff !important;
+}
+
+.copy-html-btn:hover {
+  background: linear-gradient(135deg, #f0c78a, #E6A23C);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(230, 162, 60, 0.2);
+}
+
+@media (prefers-color-scheme: light) {
+  .copy-url-btn {
+    background: linear-gradient(135deg, #409EFF 0%, #66b1ff 100%);
+  }
+  
+  .copy-markdown-btn {
+    background: linear-gradient(135deg, #67C23A 0%, #85ce61 100%);
+  }
+  
+  .copy-html-btn {
+    background: linear-gradient(135deg, #E6A23C 0%, #f0c78a 100%);
+  }
+}
