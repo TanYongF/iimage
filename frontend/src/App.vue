@@ -5,8 +5,16 @@ import { Upload } from '@element-plus/icons-vue'
 
 const uploadedUrl = ref('')
 const fileInput = ref(null)
+const uploadProgress = ref(0)
+const showProgress = ref(false)
+const previewImage = ref('')
 
 const triggerFileInput = () => {
+  if (uploadedUrl.value) {
+    // 如果已有图片，清空并重新上传
+    uploadedUrl.value = ''
+    previewImage.value = ''
+  }
   fileInput.value.click()
 }
 
@@ -39,6 +47,9 @@ const handleDrop = async (event) => {
 
 const uploadFile = async (file) => {
   try {
+    showProgress.value = true
+    uploadProgress.value = 0
+    
     const formData = new FormData()
     formData.append('image', file)
     
@@ -47,14 +58,23 @@ const uploadFile = async (file) => {
       body: formData
     })
     
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.error || '上传失败')
+    }
+    
     const data = await response.json()
     if (data.url) {
       uploadedUrl.value = data.url
+      previewImage.value = data.url
       ElMessage.success('上传成功！')
     }
   } catch (error) {
-    ElMessage.error('上传失败，请重试')
+    ElMessage.error(error.message || '上传失败，请重试')
     console.error('Upload error:', error)
+  } finally {
+    showProgress.value = false
+    uploadProgress.value = 0
   }
 }
 
@@ -80,7 +100,8 @@ const copyMarkdown = () => {
         </div>
       </template>
       
-      <div class="upload-area" 
+      <div v-if="!previewImage" 
+           class="upload-area" 
            @paste="handlePaste"
            @dragover.prevent
            @drop.prevent="handleDrop"
@@ -95,6 +116,20 @@ const copyMarkdown = () => {
           @change="handleFileSelect"
         >
       </div>
+
+      <div v-else class="preview-area">
+        <img :src="previewImage" class="preview-image" @click="triggerFileInput" />
+        <div class="preview-overlay">
+          <p>点击图片重新上传</p>
+        </div>
+      </div>
+
+      <el-progress 
+        v-if="showProgress"
+        :percentage="uploadProgress"
+        :format="() => '上传中...'"
+        status="success"
+      />
 
       <div v-if="uploadedUrl" class="result-area">
         <div class="result-row">
@@ -113,18 +148,30 @@ const copyMarkdown = () => {
         </div>
       </div>
     </el-card>
+
+    <div class="footer">
+      <a href="https://github.com/TanYongF/iimage" target="_blank" class="github-link">
+        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" class="github-icon">
+        <span>GitHub</span>
+      </a>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 0 20px;
+  width: 600px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .upload-card {
-  border-radius: 8px;
+  margin: auto;
+  width: 100%;
+  max-height: calc(100vh - 100px);
+  overflow: auto;
 }
 
 .card-header {
@@ -160,16 +207,73 @@ const copyMarkdown = () => {
   margin-bottom: 16px;
 }
 
+.preview-area {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: #f5f7fa;
+}
+
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.preview-overlay p {
+  color: white;
+  margin: 0;
+}
+
+.preview-area:hover .preview-overlay {
+  opacity: 1;
+}
+
 .result-area {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .result-row {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
-.button-group {
-  margin-top: 10px;
+.footer {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
   text-align: center;
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: #666;
+  transition: color 0.3s;
+}
+
+.github-link:hover {
+  color: #409EFF;
+}
+
+.github-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
 }
 </style>
