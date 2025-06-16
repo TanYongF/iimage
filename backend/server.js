@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const multer = require('multer');
+const path = require('path');
 const { uploadToOSS } = require('./config/oss');
 
 // 加载环境变量
@@ -12,6 +13,9 @@ const app = express();
 // 中间件
 app.use(cors());
 app.use(express.json());
+
+// 配置静态文件服务
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // 配置 multer 内存存储
 const upload = multer({
@@ -29,13 +33,18 @@ const upload = multer({
   },
 });
 
-// 基础路由
+// 基础路由 - 服务前端页面
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
+
+// API 路由
+app.get('/api/status', (req, res) => {
   res.json({ message: 'PhotoOmmit API is running' });
 });
 
 // 文件上传路由
-app.post('/upload', upload.single('image'), async (req, res) => {
+app.post('/api/upload', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: '请选择要上传的图片' });
