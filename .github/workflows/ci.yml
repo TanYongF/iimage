@@ -79,7 +79,7 @@ jobs:
             app:
               image: ${{ secrets.DOCKER_HUB_USERNAME }}/photoommit:latest
               ports:
-                - "3003:3000"
+                - "8085:3000"
               environment:
                 - NODE_ENV=production
               volumes:
