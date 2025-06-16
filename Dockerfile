@@ -33,4 +33,4 @@ WORKDIR /app/backend
 EXPOSE 3000
 
 # 启动后端服务
-CMD ["npm", "start"] 
+CMD ["node", "server.js"] 
