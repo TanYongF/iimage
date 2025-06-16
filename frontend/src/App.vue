@@ -100,9 +100,11 @@ const copyMarkdown = () => {
         <el-input v-model="uploadedUrl" readonly>
           <template #append>
             <el-button @click="copyUrl">复制链接</el-button>
-            <el-button @click="copyMarkdown">复制 Markdown</el-button>
           </template>
         </el-input>
+        <div class="button-group">
+          <el-button @click="copyMarkdown">复制 Markdown</el-button>
+        </div>
       </div>
     </el-card>
   </div>
@@ -154,5 +156,10 @@ const copyMarkdown = () => {
 
 .result-area {
   margin-top: 20px;
+}
+
+.button-group {
+  margin-top: 10px;
+  text-align: center;
 }
 </style>
