@@ -97,13 +97,19 @@ const copyMarkdown = () => {
       </div>
 
       <div v-if="uploadedUrl" class="result-area">
-        <el-input v-model="uploadedUrl" readonly>
-          <template #append>
-            <el-button @click="copyUrl">复制链接</el-button>
-          </template>
-        </el-input>
-        <div class="button-group">
-          <el-button @click="copyMarkdown">复制 Markdown</el-button>
+        <div class="result-row">
+          <el-input v-model="uploadedUrl" readonly>
+            <template #append>
+              <el-button @click="copyUrl">复制链接</el-button>
+            </template>
+          </el-input>
+        </div>
+        <div class="result-row">
+          <el-input :model-value="`![image](${uploadedUrl})`" readonly>
+            <template #append>
+              <el-button @click="copyMarkdown">复制 Markdown</el-button>
+            </template>
+          </el-input>
         </div>
       </div>
     </el-card>
@@ -156,6 +162,10 @@ const copyMarkdown = () => {
 
 .result-area {
   margin-top: 20px;
+}
+
+.result-row {
+  margin-bottom: 10px;
 }
 
 .button-group {
