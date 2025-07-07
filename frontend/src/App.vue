@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Upload } from '@element-plus/icons-vue'
 
@@ -20,6 +20,12 @@ const formatFileSize = (bytes) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
+const getUploadFileName = (file) => {
+  const ext = file.type.split('/')[1] || 'png'
+  const randomStr = Math.random().toString(36).slice(-4)
+  return `iimage_${Date.now()}_${randomStr}.${ext}`
+}
+
 const triggerFileInput = () => {
   if (uploadedUrl.value) {
     // 如果已有图片，清空并重新上传
@@ -32,14 +38,15 @@ const triggerFileInput = () => {
 const handleFileSelect = async (event) => {
   const file = event.target.files[0]
   if (file) {
-    // 使用本地文件路径预览
+    const fileName = getUploadFileName(file)
     previewImage.value = URL.createObjectURL(file)
     imageInfo.value = {
-      name: file.name,
+      name: fileName,
       size: formatFileSize(file.size),
       type: file.type
     }
-    await uploadFile(file)
+    const uploadFileObj = new File([file], fileName, { type: file.type })
+    await uploadFile(uploadFileObj)
   }
 }
 
@@ -50,7 +57,19 @@ const handlePaste = async (event) => {
   for (const item of items) {
     if (item.type.indexOf('image') !== -1) {
       const file = item.getAsFile()
-      await uploadFile(file)
+      if (file) {
+        const fileName = getUploadFileName(file)
+        previewImage.value = URL.createObjectURL(file)
+        imageInfo.value = {
+          name: fileName,
+          size: formatFileSize(file.size),
+          type: file.type
+        }
+        const uploadFileObj = new File([file], fileName, { type: file.type })
+        await uploadFile(uploadFileObj)
+      } else {
+        ElMessage.warning('粘贴内容不是有效的图片文件')
+      }
       break
     }
   }
@@ -116,6 +135,13 @@ const copyHtml = () => {
   navigator.clipboard.writeText(html)
   ElMessage.success('HTML 链接已复制到剪贴板')
 }
+
+onMounted(() => {
+  window.addEventListener('paste', handlePaste)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('paste', handlePaste)
+})
 </script>
 
 <template>
@@ -130,7 +156,6 @@ const copyHtml = () => {
       
       <div v-if="!previewImage" 
            class="upload-area" 
-           @paste="handlePaste"
            @dragover.prevent
            @drop.prevent="handleDrop"
            @click="triggerFileInput">

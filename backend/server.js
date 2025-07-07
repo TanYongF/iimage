@@ -102,6 +102,7 @@ app.post('/api/upload', rateLimiter, upload.single('image'), async (req, res) =>
       return res.status(400).json({ error: '请选择要上传的图片' });
     }
 
+    const fileName = req.file.originalname || 'pasted-image.png';
     const result = await uploadToOSS(req.file);
     res.json({ 
       url: result.url,
