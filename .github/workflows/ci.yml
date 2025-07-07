@@ -6,11 +6,15 @@ on:
     paths:
       - 'frontend/**'
       - 'backend/**'
+      - 'Dockerfile'
+      - 'docker-compose.yml'
   pull_request:
     branches: [ master ]
     paths:
       - 'frontend/**'
       - 'backend/**'
+      - 'Dockerfile'
+      - 'docker-compose.yml'
 
 jobs:
   build-and-deploy:
