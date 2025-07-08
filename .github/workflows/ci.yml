@@ -67,8 +67,6 @@ jobs:
         context: .
         push: true
         tags: ${{ secrets.DOCKER_HUB_USERNAME }}/photoommit:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
         secrets: |
           "OSS_ACCESS_KEY_ID=${{ secrets.OSS_ACCESS_KEY_ID }}"
           "OSS_ACCESS_KEY_SECRET=${{ secrets.OSS_ACCESS_KEY_SECRET }}"
