@@ -8,6 +8,7 @@ on:
       - 'backend/**'
       - 'Dockerfile'
       - 'docker-compose.yml'
+      - '.github/workflows/**'
   pull_request:
     branches: [ master ]
     paths:
@@ -15,6 +16,7 @@ on:
       - 'backend/**'
       - 'Dockerfile'
       - 'docker-compose.yml'
+      - '.github/workflows/**'
 
 jobs:
   build-and-deploy:
