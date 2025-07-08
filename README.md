@@ -1,7 +1,7 @@
 # PhotoOmmit
 
 一个轻量级的在线图床服务，支持图片上传、链接复制和 Markdown 格式复制。
-
+[![CI/CD Pipeline](https://github.com/TanYongF/iimage/actions/workflows/ci.yml/badge.svg)](https://github.com/TanYongF/iimage/actions/workflows/ci.yml)
 ## 功能特点
 
 - 支持拖拽、点击或粘贴上传图片
