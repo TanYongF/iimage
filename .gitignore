@@ -32,3 +32,4 @@ Thumbs.db
 
 # build 产物
 backend/build-info.json
+mcp/PUBLISH_GUIDE.md
