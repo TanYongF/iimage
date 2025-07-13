@@ -50,7 +50,9 @@ jobs:
 
   publish:
     needs: build-and-test
-    if: github.event_name == 'push' && (github.ref_type == 'tag' || github.event.inputs.publish == 'true')
+    if: |
+      (github.event_name == 'push' && (github.ref_type == 'tag' || github.event.inputs.publish == 'true'))
+      || (github.event_name == 'workflow_dispatch' && github.event.inputs.publish == 'true')
     runs-on: ubuntu-latest
     environment: npm-publish
     steps:
