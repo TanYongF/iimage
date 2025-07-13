@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "target": "ES2022",                // 编译后的 JavaScript 代码将使用 ES2022 语法标准
+      "module": "Node16",                // 使用 Node.js 16 的模块系统（支持 ES 模块）
+      "moduleResolution": "Node16",      // 模块解析方式也采用 Node.js 16 的规则
+      "outDir": "./build",               // 编译后的文件输出到 build 目录
+      "rootDir": "./src",                // 源代码的根目录为 src
+      "strict": true,                    // 启用所有严格类型检查选项
+      "esModuleInterop": true,           // 允许默认导入非 ES 模块（如 CommonJS 模块）
+      "skipLibCheck": true,              // 跳过对依赖库的类型检查，加快编译速度
+      "forceConsistentCasingInFileNames": true // 文件名大小写必须一致，防止跨平台问题
+    },
+    "include": ["src/**/*"],             // 只包含 src 目录下的所有文件
+    "exclude": ["node_modules"]          // 排除 node_modules 目录
+  }

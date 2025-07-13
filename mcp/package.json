@@ -1,0 +1,67 @@
+{
+  "name": "@tans-dev/photoommit-mcp",
+  "type": "module",
+  "version": "1.0.1",
+  "description": "MCP (Model Context Protocol) server for PhotoOmmit image upload service with OSS integration",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && chmod 755 build/index.js",
+    "prepublishOnly": "npm run build",
+    "prepack": "npm run build",
+    "clean": "rm -rf build/",
+    "dev": "tsc --watch",
+    "lint": "echo 'Add your linting command here'",
+    "prepare": "npm run build"
+  },
+  "bin": {
+    "photoommit-mcp": "./build/index.js"
+  },
+  "files": [
+    "build/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "image-upload",
+    "oss",
+    "alibaba-cloud",
+    "photoommit",
+    "ai-tools",
+    "file-management"
+  ],
+  "author": {
+    "name": "TanYongF",
+    "email": "tan13621251388@gmail.com",
+    "url": "https://github.com/TanYongF"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TanYongF/iimage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TanYongF/iimage/issues"
+  },
+  "homepage": "https://github.com/TanYongF/iimage#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.15.1",
+    "ali-oss": "^6.23.0",
+    "dotenv": "^17.2.0",
+    "mime": "^4.0.7",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/ali-oss": "^6.16.11",
+    "@types/node": "^24.0.13",
+    "typescript": "^5.8.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
