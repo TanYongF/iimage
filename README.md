@@ -1,112 +1,119 @@
 # PhotoOmmit
 
-一个轻量级的在线图床服务，支持图片上传、链接复制和 Markdown 格式复制。
-[![CI/CD Pipeline](https://github.com/TanYongF/iimage/actions/workflows/ci.yml/badge.svg)](https://github.com/TanYongF/iimage/actions/workflows/ci.yml)
-## 功能特点
+[![npm](https://img.shields.io/npm/v/@tans-dev/photoommit-mcp?color=orange&label=npm)](https://www.npmjs.com/package/@tans-dev/photoommit-mcp) ![Express](https://img.shields.io/badge/Express-4%2B-000000?logo=express&logoColor=white) ![OSS](https://img.shields.io/badge/OSS-Alibaba-1e90ff?logo=alibabacloud&logoColor=white) ![MIT License](https://img.shields.io/badge/license-MIT-ff9800) [![CI/CD Pipeline](https://github.com/TanYongF/iimage/actions/workflows/mcp-build-and-publish.yml/badge.svg)](https://github.com/TanYongF/iimage/actions/workflows/mcp-build-and-publish.yml) [![CI/CD Pipeline](https://github.com/TanYongF/iimage/actions/workflows/web-build-and-publish.yml/badge.svg)](https://github.com/TanYongF/iimage/actions/workflows/web-build-and-publish.yml)
 
-- 支持拖拽、点击或粘贴上传图片
-- 支持复制图片链接和 Markdown 格式
-- 支持大文件上传（最大 30MB）
-- 内置限速保护：
-  - 每秒最多上传 5 张图片
-  - 每个 IP 每天最多上传 100 张图片
-- 支持 Docker 部署
-- 支持 GitHub Actions 自动部署
 
-## 技术栈
+🖼️ 轻量级在线图床，支持图片上传、链接和 Markdown 复制。可通过网页或 MCP 客户端一键使用。
+👉 [🌐 在线一键体验 PhotoOmmit](https://paste.tans.fun/)  （无需本地部署，立即试用！）
 
-- 前端：Vue 3 + Element Plus
-- 后端：Node.js + Express
-- 存储：阿里云 OSS
-- 部署：Docker + GitHub Actions
 
-## 本地开发
 
-1. 克隆仓库：
-```bash
-git clone https://github.com/你的用户名/photoommit.git
-cd photoommit
+## ✨ 功能亮点
+
+- 拖拽、点击或粘贴上传图片
+- 一键复制图片链接和 Markdown
+- 支持大文件（最大 30MB）
+- Web 页面和 MCP 客户端均可用
+- 云存储：阿里云 OSS
+- 支持 Docker 部署 & GitHub Actions 自动化
+
+---
+
+## 🚀 MCP 一键集成（推荐）
+
+PhotoOmmit 支持 [MCP 协议](https://github.com/modelcontextprotocol/spec)，可直接集成到 Cursor、AI 工具链等平台。
+
+> **无需本地安装，无需环境变量，只需配置即可用。当前仅支持阿里云 OSS。**
+
+### Cursor/AI 工具链配置示例
+
+```jsonc
+{
+  "mcpServers": {
+    "photoommit": {
+      "command": "npx",
+      "args": ["@tans-dev/photoommit-mcp@latest"],
+      "env": {
+        // OSS 区域，如 oss-cn-shanghai
+        "OSS_REGION": "your-region",
+        // AccessKey ID
+        "OSS_ACCESS_KEY_ID": "your-access-key-id",
+        // AccessKey Secret
+        "OSS_ACCESS_KEY_SECRET": "your-access-key-secret",
+        // 存储桶名称
+        "OSS_BUCKET": "your-bucket-name",
+        // Endpoint，推荐加速域名
+        "OSS_ENDPOINT": "your-endpoint"
+      }
+    }
+  }
+}
 ```
 
-2. 安装依赖：
-```bash
-# 安装前端依赖
-cd frontend
-npm install
+### 可用工具一览
 
-# 安装后端依赖
-cd ../backend
-npm install
-```
+| 工具名称            | 功能描述                     | 主要参数                      |
+|---------------------|------------------------------|-------------------------------|
+| image-upload-oss    | 上传本地文件到 OSS 云存储    | filePath（必填），fileName（可选） |
+| image-download-oss  | 根据 OSS 文件唯一 ID 下载文件 | id（必填）                    |
+| image-delete-oss    | 根据 OSS 文件唯一 ID 删除云端文件 | id（必填）                |
+| image-info-oss      | 查询 OSS 文件详细信息         | id（必填）                    |
 
-3. 配置环境变量：
-```bash
-# 在 backend 目录下创建 .env 文件
-cp env.example.txt .env
-# 编辑 .env 文件，填入你的阿里云 OSS 配置
-```
+---
 
-4. 启动开发服务器：
-```bash
-# 启动前端开发服务器
-cd frontend
-npm run dev
+## 🖥️ Web 本地开发
 
-# 启动后端服务器
-cd ../backend
-npm run dev
-```
+1. 克隆仓库
+   ```bash
+   git clone https://github.com/你的用户名/photoommit.git
+   cd photoommit
+   ```
+2. 安装依赖
+   ```bash
+   # 前端
+   cd frontend && npm install
+   # 后端
+   cd ../backend && npm install
+   ```
+3. 配置环境变量
+   ```bash
+   # backend 目录下创建 .env
+   cp env.example.txt .env
+   # 编辑 .env，填写 OSS 配置
+   ```
+4. 启动服务
+   ```bash
+   # 前端
+   cd frontend && npm run dev
+   # 后端
+   cd ../backend && npm run dev
+   ```
 
-## Docker 部署
+---
 
-1. 构建镜像：
-```bash
-docker-compose build
-```
+## 🐳 Docker 部署
 
-2. 启动服务：
-```bash
-docker-compose up -d
-```
+1. 构建镜像
+   ```bash
+   docker-compose build
+   ```
+2. 启动服务
+   ```bash
+   docker-compose up -d
+   ```
+   服务默认运行在 http://localhost:8085
 
-服务将在 http://localhost:8085 上运行。
 
-## 环境变量配置
+---
 
-在 `backend/.env` 文件中配置以下环境变量：
-
-```env
-# 服务器配置
-PORT=3000
-
-# 阿里云 OSS 配置
-OSS_REGION=your-region
-OSS_ACCESS_KEY_ID=your-access-key-id
-OSS_ACCESS_KEY_SECRET=your-access-key-secret
-OSS_BUCKET=your-bucket-name
-OSS_ENDPOINT=your-endpoint
-```
-
-## 限速配置
-
-在 `backend/server.js` 中可以修改限速配置：
-
-```javascript
-const RATE_LIMIT = {
-  windowMs: 1000,    // 时间窗口（毫秒）
-  max: 5,            // 每秒最大请求数
-  dailyLimit: 100    // 每日最大请求数
-};
-```
-
-## 贡献指南
-
+## 🤝 贡献
 1. Fork 本仓库
-2. 创建你的特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交你的更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启一个 Pull Request
+2. 创建分支 (`git checkout -b feature/xxx`)
+3. 提交更改 (`git commit -m 'feat: xxx'`)
+4. 推送分支 (`git push origin feature/xxx`)
+5. 发起 Pull Request
 
-## 许可证
+---
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
+## 📄 许可证
+MIT License - 详见 [LICENSE](LICENSE)
