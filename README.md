@@ -4,6 +4,7 @@
 
 
 🖼️ 轻量级在线图床，支持图片上传、链接和 Markdown 复制。可通过网页或 MCP 客户端一键使用。
+
 👉 [🌐 在线一键体验 PhotoOmmit](https://paste.tans.fun/)  （无需本地部署，立即试用！）
 
 
@@ -17,7 +18,6 @@
 - 云存储：阿里云 OSS
 - 支持 Docker 部署 & GitHub Actions 自动化
 
----
 
 ## 🚀 MCP 一键集成（推荐）
 
