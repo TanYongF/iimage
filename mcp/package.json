@@ -1,7 +1,7 @@
 {
   "name": "@tans-dev/photoommit-mcp",
   "type": "module",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "MCP (Model Context Protocol) server for PhotoOmmit image upload service with OSS integration",
   "main": "build/index.js",
   "scripts": {
