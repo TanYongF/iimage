@@ -51,7 +51,6 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.15.1",
-    "@tans-dev/photoommit-mcp": "^1.0.2",
     "ali-oss": "^6.23.0",
     "dotenv": "^17.2.0",
     "mime": "^4.0.7",
