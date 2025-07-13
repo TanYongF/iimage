@@ -114,10 +114,14 @@ jobs:
         cache: 'npm'
         cache-dependency-path: 'mcp/package-lock.json'
         registry-url: 'https://registry.npmjs.org'
+        scope: '@tans-dev'
 
     - name: Install MCP dependencies
       working-directory: ./mcp
       run: npm ci
+
+    - name: Login to npm
+      run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
     - name: Build MCP project
       working-directory: ./mcp
