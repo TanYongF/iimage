@@ -29,3 +29,6 @@ Thumbs.db
 *.pem
 *.key 
 .cursor/
+
+# build 产物
+backend/build-info.json

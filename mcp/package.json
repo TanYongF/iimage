@@ -1,0 +1,32 @@
+{
+  "name": "mcp",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && chmod 755 build/index.js"
+  },
+  "bin": {
+    "weather": "./build/index.js"
+  },
+  "files": [
+    "build"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.15.1",
+    "ali-oss": "^6.23.0",
+    "dotenv": "^17.2.0",
+    "mime": "^4.0.7",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/ali-oss": "^6.16.11",
+    "@types/node": "^24.0.13",
+    "typescript": "^5.8.3"
+  }
+}
