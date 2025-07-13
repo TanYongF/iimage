@@ -15,7 +15,7 @@
     "prepare": "npm run build"
   },
   "bin": {
-    "photoommit-mcp": "./build/index.js"
+    "photoommit-mcp": "build/index.js"
   },
   "files": [
     "build/**/*",
