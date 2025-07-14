@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Tech-themed color system */
+    --background: 220 13% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 220 13% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 220 13% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Cyber blue primary */
+    --primary: 210 100% 56%;
+    --primary-foreground: 220 13% 6%;
+    --primary-glow: 210 100% 70%;
+
+    /* Electric purple secondary */
+    --secondary: 270 100% 60%;
+    --secondary-foreground: 210 40% 98%;
+    --secondary-glow: 270 100% 75%;
+
+    /* Neon green accent */
+    --accent: 120 100% 50%;
+    --accent-foreground: 220 13% 6%;
+    --accent-glow: 120 100% 65%;
+
+    --muted: 220 13% 12%;
+    --muted-foreground: 220 9% 55%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 13% 15%;
+    --input: 220 13% 12%;
+    --ring: 210 100% 56%;
+
+    --radius: 0.75rem;
+
+    /* Tech gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--secondary-glow)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-glow)));
+    --gradient-cyber: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-bg: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(220 13% 8%) 100%);
+
+    /* Tech shadows */
+    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.3);
+    --shadow-secondary-glow: 0 0 30px hsl(var(--secondary) / 0.3);
+    --shadow-accent-glow: 0 0 30px hsl(var(--accent) / 0.3);
+    --shadow-elegant: 0 10px 40px -10px hsl(var(--primary) / 0.4);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    /* Keep the same values for consistency in dark theme */
+    --background: 220 13% 6%;
+    --foreground: 210 40% 98%;
+    --card: 220 13% 8%;
+    --card-foreground: 210 40% 98%;
+    --popover: 220 13% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 100% 56%;
+    --primary-foreground: 220 13% 6%;
+    --secondary: 270 100% 60%;
+    --secondary-foreground: 210 40% 98%;
+    --accent: 120 100% 50%;
+    --accent-foreground: 220 13% 6%;
+    --muted: 220 13% 12%;
+    --muted-foreground: 220 9% 55%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 220 13% 15%;
+    --input: 220 13% 12%;
+    --ring: 210 100% 56%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

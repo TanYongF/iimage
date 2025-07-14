@@ -10,7 +10,7 @@ const ipRequests = {};
 const rateLimiter = (req, res, next) => {
   const ip = req.ip;
   const now = Date.now();
-
+  console.log('ip:', req.ip, req.headers['x-forwarded-for']);
   if (!ipRequests[ip]) {
     ipRequests[ip] = {
       requests: [],
