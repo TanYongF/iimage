@@ -17,15 +17,15 @@ export const Navbar = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center">
+          <Link to="/" className="flex items-center gap-3 group cursor-pointer select-none" tabIndex={0} aria-label="Go to home">
+            <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
               <Upload className="w-6 h-6 text-primary-foreground" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold text-foreground">iimage</span>
+              <span className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">iimage</span>
               <span className="text-xs text-muted-foreground">Image Platform</span>
             </div>
-          </div>
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
@@ -92,16 +92,32 @@ export const Navbar = () => {
                     onClick={e => {
                       e.preventDefault();
                       window.scrollTo({ top: 0, behavior: 'smooth' });
-                      // 关闭 Drawer
                       drawerCloseRef.current?.click();
+                      window.location.href = '/';
                     }}
                   >
                     首页
                   </Link>
-                  <Link to="/mcp" className="text-foreground hover:text-primary transition-colors" onClick={() => {}}>
+                  <Link
+                    to="/mcp"
+                    className="text-foreground hover:text-primary transition-colors"
+                    onClick={e => {
+                      e.preventDefault();
+                      drawerCloseRef.current?.click();
+                      window.location.href = '/mcp';
+                    }}
+                  >
                     MCP协议
                   </Link>
-                  <Link to="/about" className="text-foreground hover:text-primary transition-colors" onClick={() => {}}>
+                  <Link
+                    to="/about"
+                    className="text-foreground hover:text-primary transition-colors"
+                    onClick={e => {
+                      e.preventDefault();
+                      drawerCloseRef.current?.click();
+                      window.location.href = '/about';
+                    }}
+                  >
                     About
                   </Link>
                   <a

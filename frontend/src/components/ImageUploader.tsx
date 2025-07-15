@@ -18,6 +18,14 @@ interface LinkType {
   format: string;
 }
 
+interface AxiosErrorLike {
+  response?: {
+    data?: {
+      error?: string;
+    };
+  };
+}
+
 export const ImageUploader = () => {
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const [dragActive, setDragActive] = useState(false);
@@ -48,7 +56,7 @@ export const ImageUploader = () => {
     handleFiles(files);
   }, []);
 
-  const handleFiles = async (files: File[]) => {
+  const handleFiles = useCallback(async (files: File[]) => {
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
     if (imageFiles.length === 0) {
       toast({
@@ -72,15 +80,24 @@ export const ImageUploader = () => {
           title: "Image uploaded successfully!",
           description: `${file.name} has been uploaded.`
         });
-      } catch (err: any) {
+      } catch (err: unknown) {
+        let errorMsg = 'Failed to upload image.';
+        if (typeof err === 'object' && err !== null && 'response' in err) {
+          const response = (err as AxiosErrorLike).response;
+          if (response?.data?.error) {
+            errorMsg = response.data.error;
+          }
+        } else if (err instanceof Error) {
+          errorMsg = err.message;
+        }
         toast({
           title: "Upload failed",
-          description: err?.message || 'Failed to upload image.',
+          description: errorMsg,
           variant: "destructive"
         });
       }
     }
-  };
+  }, [toast, setUploadedImages]);
 
   // 粘贴图片上传
   useEffect(() => {
@@ -113,7 +130,7 @@ export const ImageUploader = () => {
       },
       {
         label: "HTML Code",
-        value: `<img src=\"${baseUrl}\" alt=\"${fileName}\" />`,
+        value: `<img src="${baseUrl}" alt="${fileName}" />`,
         format: "HTML"
       },
       {

@@ -34,9 +34,9 @@ export const Hero = () => {
       {/* Background */}
       <div className="absolute inset-0">
         <img 
-          src={heroImage} 
+          src="https://kauizhaotan.oss-cn-shanghai.aliyuncs.com/PhotoOmmit/1752543698991-gwmm8g.png" 
           alt="Tech Background" 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover blur-xs md:blur-sm"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-background/90 via-background/70 to-background/90"></div>
         <div className="absolute inset-0 bg-gradient-cyber opacity-10"></div>
@@ -68,16 +68,18 @@ export const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button 
-              variant="neon" 
-              size="xl" 
-              onClick={scrollToUpload}
-              className="group hover:scale-105 hover:shadow-glow transition-transform duration-300"
-            >
-              <span>Start Uploading</span>
-              <ArrowRight className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
-            </Button>
-            
+            {/* 辉光流动按钮 */}
+            <div className="relative group flex items-center justify-center">
+              <div className="absolute -inset-1.5 rounded-2xl blur-lg opacity-80 group-hover:opacity-100 transition duration-500 group-hover:duration-200 will-change-filter overflow-hidden animate-glow-border bg-gradient-to-r from-primary via-primary-glow to-secondary" />
+              <button
+                onClick={scrollToUpload}
+                className="relative z-10 h-14 md:h-16 rounded-lg px-10 text-base md:text-lg font-bold bg-background/60 backdrop-blur-md border border-white text-foreground flex flex-row items-center justify-center gap-2 shadow-lg group-hover:scale-105 transition duration-300 overflow-hidden whitespace-nowrap"
+              >
+                <span>Start Uploading</span>
+                <ArrowRight className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1 flex-shrink-0" />
+              </button>
+            </div>
+            {/* 文档按钮保持原样 */}
             <a
               href="https://github.com/TanYongF/iimage"
               target="_blank"

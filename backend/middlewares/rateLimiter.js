@@ -2,13 +2,22 @@
 const RATE_LIMIT = {
   windowMs: 1000, // 1 second
   max: 5,         // max 5 requests per second
-  dailyLimit: 100 // max 100 requests per day
+  dailyLimit: 50 // max 100 requests per day
 };
 
 const ipRequests = {};
 
+const getClientIp = (req) => {
+  const xff = req.headers['x-forwarded-for'];
+  if (xff) {
+    // x-forwarded-for 可能是逗号分隔的多个 IP，取第一个
+    return xff.split(',')[0].trim();
+  }
+  return req.ip;
+};
+
 const rateLimiter = (req, res, next) => {
-  const ip = req.ip;
+  const ip = getClientIp(req);
   const now = Date.now();
   console.log('ip:', req.ip, req.headers['x-forwarded-for']);
   if (!ipRequests[ip]) {
