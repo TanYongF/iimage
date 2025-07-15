@@ -3,11 +3,9 @@ const router = express.Router();
 
 const statusRouter = require('./status');
 const uploadRouter = require('./upload');
-const mcpRouter = require('./mcp');
 
 router.use('/api/status', statusRouter);
 router.use('/api/upload', uploadRouter);
-router.use('/mcp', mcpRouter);
 
 // Serve frontend
 const path = require('path');

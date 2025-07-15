@@ -24,6 +24,13 @@ app.use('/', routes);
 // Error handler
 app.use(errorHandler);
 
+// SPA 路由兜底：非 API/静态资源的请求都返回 index.html
+app.get('*', (req, res) => {
+  // 如果请求以 /api/ 开头，直接返回 404（如有其他 API 路径请自行补充判断）
+  if (req.path.startsWith('/api/')) return res.status(404).end();
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
