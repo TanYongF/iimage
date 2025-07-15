@@ -120,26 +120,6 @@ export const Navbar = () => {
                   >
                     About
                   </Link>
-                  <a
-                    href="https://github.com/TanYongF/iimage"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-foreground hover:text-primary"
-                  >
-                    <Github className="w-5 h-5" />
-                    GitHub
-                  </a>
-                  <Button
-                    variant="cyber"
-                    size="lg"
-                    className="w-full"
-                    onClick={() => {
-                      const el = document.getElementById('upload-section');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                  >
-                    Get Started
-                  </Button>
                 </div>
               </DrawerContent>
             </Drawer>

@@ -72,14 +72,20 @@ export const Hero = () => {
             <div className="relative group flex items-center justify-center">
               <div className="
                 absolute
-                -inset-0.5 blur-sm opacity-40
-                md:-inset-1.5 md:blur-lg md:opacity-80
+                hidden md:block
+                -inset-1.5 blur-lg opacity-80
                 group-hover:opacity-100 transition duration-500 group-hover:duration-200
                 will-change-filter overflow-hidden animate-glow-border bg-gradient-to-r from-primary via-primary-glow to-secondary
               " />
               <button
                 onClick={scrollToUpload}
-                className="relative z-10 h-14 md:h-16 rounded-lg px-10 text-base md:text-lg font-bold bg-background/60 backdrop-blur-md border border-white text-foreground flex flex-row items-center justify-center gap-2 shadow-lg group-hover:scale-105 transition duration-300 overflow-hidden whitespace-nowrap"
+                className="
+                  relative z-10 h-14 md:h-16 rounded-lg px-10 text-base md:text-lg font-bold
+                  bg-gradient-to-r from-primary via-primary-glow to-secondary
+                  md:bg-background/60 md:backdrop-blur-md md:border md:border-white
+                  text-foreground flex flex-row items-center justify-center gap-2 shadow-lg
+                  group-hover:scale-105 transition duration-300 overflow-hidden whitespace-nowrap
+                "
               >
                 <span>Start Uploading</span>
                 <ArrowRight className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1 flex-shrink-0" />
