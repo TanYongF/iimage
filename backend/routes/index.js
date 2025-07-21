@@ -3,9 +3,11 @@ const router = express.Router();
 
 const statusRouter = require('./status');
 const uploadRouter = require('./upload');
+const noteRouter = require('./note');
 
 router.use('/api/status', statusRouter);
 router.use('/api/upload', uploadRouter);
+router.use('/api/note', noteRouter);
 
 // Serve frontend
 const path = require('path');
