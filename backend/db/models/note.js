@@ -2,22 +2,22 @@ const db = require('../index');
 
 // 获取 note
 async function getNote(key) {
-  const [rows] = await db.execute('SELECT value FROM note WHERE `key`=?', [key]);
-  return rows[0]?.value;
+  const [rows] = await db.execute('SELECT `key`, `value`, `url`, `createdTime`, `updatedTime` FROM note WHERE `key`=?', [key]);
+  return rows[0];
 }
 
 // 新增/更新 note
-async function setNote(key, value) {
+async function setNote(key, value, url = null) {
   const [result] = await db.execute(
-    'INSERT INTO note (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value`=?, updatedTime=NOW()',
-    [key, value, value]
+    'INSERT INTO note (`key`, `value`, `url`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `value`=?, `url`=?, updatedTime=NOW()',
+    [key, value, url, value, url]
   );
   return result.affectedRows > 0;
 }
 
 // 获取所有 note
 async function getAllNotes() {
-  const [rows] = await db.execute('SELECT `key`, `value`, `createdTime`, `updatedTime` FROM note');
+  const [rows] = await db.execute('SELECT `key`, `value`, `url`, `createdTime`, `updatedTime` FROM note');
   return rows;
 }
 

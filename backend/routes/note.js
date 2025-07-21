@@ -4,12 +4,12 @@ const noteModel = require('../db/models/note');
 
 // 创建/更新笔记
 router.post('/', async (req, res) => {
-  const { key, value } = req.body;
+  const { key, value, url } = req.body;
   if (!key) {
     return res.status(400).json({ code: 1, message: 'key is required', data: null });
   }
   try {
-    const success = await noteModel.setNote(key, value);
+    const success = await noteModel.setNote(key, value, url);
     if (success) {
       res.json({ code: 0, message: 'Note saved successfully', data: null });
     } else {
@@ -27,9 +27,9 @@ router.get('/:key', async (req, res) => {
     return res.status(400).json({ code: 1, message: 'key is required', data: null });
   }
   try {
-    const value = await noteModel.getNote(key);
-    if (value !== undefined) {
-      res.json({ code: 0, message: 'success', data: { key, value } });
+    const note = await noteModel.getNote(key);
+    if (note) {
+      res.json({ code: 0, message: 'success', data: note });
     } else {
       res.status(404).json({ code: 1, message: 'Note not found', data: null });
     }
