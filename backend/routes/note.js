@@ -20,6 +20,23 @@ router.post('/', async (req, res) => {
   }
 });
 
+// 获取全部笔记
+router.get('/', async (req, res) => {
+  try {
+    const notes = await noteModel.getAllNotes();
+    res.json({ 
+      code: 0, 
+      message: 'success', 
+      data: {
+        total: notes.length,
+        notes: notes
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message || 'Internal server error', data: null });
+  }
+});
+
 // 查询笔记
 router.get('/:key', async (req, res) => {
   const { key } = req.params;
