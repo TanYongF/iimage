@@ -57,16 +57,25 @@ export const ImageUploader = () => {
   }, []);
 
   const handleFiles = useCallback(async (files: File[]) => {
-    const imageFiles = files.filter(file => file.type.startsWith('image/'));
-    if (imageFiles.length === 0) {
+    const allowed = files.filter(file => file.type.startsWith('image/') || file.type === 'video/mp4');
+    if (allowed.length === 0) {
       toast({
-        title: "Invalid file type",
-        description: "Please upload only image files.",
+        title: "Unsupported file type",
+        description: "Only images or MP4 videos are allowed.",
         variant: "destructive"
       });
       return;
     }
-    for (const file of imageFiles) {
+    const MAX_SIZE = 100 * 1024 * 1024; // 100MB
+    for (const file of allowed) {
+      if (file.size > MAX_SIZE) {
+        toast({
+          title: "File too large",
+          description: `${file.name} exceeds 100MB limit.`,
+          variant: "destructive"
+        });
+        continue;
+      }
       try {
         const { url, fileName } = await uploadImageToOSS(file);
         const newImage: UploadedImage = {
@@ -77,7 +86,7 @@ export const ImageUploader = () => {
         };
         setUploadedImages(prev => [newImage, ...prev]);
         toast({
-          title: "Image uploaded successfully!",
+          title: "Uploaded successfully!",
           description: `${file.name} has been uploaded.`
         });
       } catch (err: unknown) {
@@ -209,7 +218,7 @@ export const ImageUploader = () => {
           <input
             type="file"
             multiple
-            accept="image/*"
+            accept="image/*,video/mp4"
             onChange={handleFileInput}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
@@ -220,7 +229,7 @@ export const ImageUploader = () => {
             </div>
             
             <div className="space-y-2">
-              <h3 className="text-xl font-semibold text-foreground">Drop your images here</h3>
+              <h3 className="text-xl font-semibold text-foreground">Drop your images or MP4 here</h3>
               <p className="text-muted-foreground">
                 or{' '}
                 <span className="text-primary font-semibold hover:text-primary-glow transition-colors cursor-pointer">Browse files</span>
@@ -236,6 +245,7 @@ export const ImageUploader = () => {
               <span className="px-3 py-1 bg-muted rounded-full">PNG</span>
               <span className="px-3 py-1 bg-muted rounded-full">GIF</span>
               <span className="px-3 py-1 bg-muted rounded-full">WebP</span>
+              <span className="px-3 py-1 bg-muted rounded-full">MP4</span>
             </div>
           </div>
         </div>
@@ -267,13 +277,22 @@ export const ImageUploader = () => {
               return (
                 <Card key={image.id} className="p-6 bg-card/50 backdrop-blur-sm border-primary/20 animate-slide-up">
                   <div className="space-y-4">
-                    {/* Image Header */}
+                    {/* File Header */}
                     <div className="flex items-start gap-4">
-                      <img
-                        src={image.url}
-                        alt={image.file.name}
-                        className="w-20 h-20 object-cover rounded-lg border border-primary/20 shrink-0"
-                      />
+                      {image.file.type.startsWith('video/') ? (
+                        <video
+                          src={image.url}
+                          className="w-20 h-20 object-cover rounded-lg border border-primary/20 shrink-0"
+                          controls
+                          preload="metadata"
+                        />
+                      ) : (
+                        <img
+                          src={image.url}
+                          alt={image.file.name}
+                          className="w-20 h-20 object-cover rounded-lg border border-primary/20 shrink-0"
+                        />
+                      )}
                       
                       <div className="flex-1 min-w-0 space-y-2">
                         <div className="flex items-center justify-between">
@@ -308,7 +327,7 @@ export const ImageUploader = () => {
                       </div>
                       
                       <div className="grid gap-3">
-                        {links.map((link, index) => {
+                        {getLinksForImage(image).map((link, index) => {
                           const linkId = `${image.id}-${index}`;
                           const isCopied = copiedLinks.has(linkId);
                           
